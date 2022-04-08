@@ -1,14 +1,9 @@
 FROM jlesage/baseimage-gui:debian-11
 
-ENV APP_NAME="iDRAC 6"  \
-    IDRAC_PORT=443      \
-    DISPLAY_WIDTH=801   \
-    DISPLAY_HEIGHT=621
-
-COPY keycode-hack.c /keycode-hack.c
-
 RUN APP_ICON_URL=https://raw.githubusercontent.com/DomiStyle/docker-idrac6/master/icon.png && \
     install_app_icon.sh "$APP_ICON_URL"
+
+COPY keycode-hack.c /keycode-hack.c
 
 RUN apt-get update && \
     apt-get install -y wget software-properties-common libx11-dev gcc xdotool && \
@@ -22,6 +17,11 @@ RUN apt-get update && \
 
 RUN mkdir /app && \
     chown ${USER_ID}:${GROUP_ID} /app
+
+ENV APP_NAME="iDRAC 6"  \
+    IDRAC_PORT=443      \
+    DISPLAY_WIDTH=801   \
+    DISPLAY_HEIGHT=621
 
 COPY startapp.sh /startapp.sh
 COPY mountiso.sh /mountiso.sh
